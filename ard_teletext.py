@@ -1,11 +1,6 @@
 import requests
 import html
 
-def input_page():
-    site = input("Seite (z.B:100):\n")
-    link = "http://www.ard-text.de/index.php?page="+site
-    ardtext(link)
-
 def ardtext(link):
     holesite = requests.get(link).text
     holesite = holesite.split(">")
@@ -27,11 +22,29 @@ def ardtext(link):
                 break
 
     teletext = html.unescape(teletext)
-    if teletext == "":
-        print("Ihre Seitenzahl("+link[37:]+") lieferte kein Ergebnis.\n")
-    else:
-        print(teletext)
-    input_page()
+    print(chr(27) + "[2J")
+    print(teletext)
+
+if __name__ == "__main__":
+    site = 100
+    sub = 1
+    while site != 999:
+           link = "http://www.ard-text.de/index.php?page="+str(site)+"&sub="+str(sub)
+           ardtext(link)
+           inputstr = input("Seite:"+str(site)+" Sub: "+str(sub)+" > xxx/Ret/Blnk/i/j/999\n")
+           if inputstr == "i":
+                site = site - 1
+                sub = 1
+           elif inputstr == "":
+                site = site + 1
+                sub = 1
+           elif inputstr == "j":
+                sub = sub - 1
+           elif inputstr == " ":
+                sub = sub + 1
+           else:
+               site = int(inputstr)
+                sub = 1
 
 if __name__ == "__main__":
     input_page()
